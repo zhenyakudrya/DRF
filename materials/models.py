@@ -6,10 +6,10 @@ NULLABLE = {'null': True, 'blank': True}
 
 class Lesson(models.Model):
     lesson_name = models.CharField(max_length=100, verbose_name='название')
-    lesson_content = models.TextField(verbose_name='описание')
+    lesson_content = models.TextField(verbose_name='описание', **NULLABLE)
     lesson_image = models.ImageField(upload_to='materials/', **NULLABLE)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE)
-    link_video = models.URLField(verbose_name='ссылка на видео')
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, **NULLABLE)
+    link_video = models.URLField(verbose_name='ссылка на видео', **NULLABLE)
 
     def __str__(self):
         return f'{self.lesson_name}'

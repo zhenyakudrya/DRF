@@ -1,8 +1,12 @@
 from django.urls import path
 from rest_framework import routers
 
+from materials.apps import MaterialsConfig
 from materials.views.lesson import *
 from materials.views.course import *
+
+app_name = MaterialsConfig.name
+
 
 urlpatterns = [
     path('', LessonListView.as_view()),
@@ -13,7 +17,8 @@ urlpatterns = [
 
 ]
 
-router = routers.SimpleRouter()
-router.register('course', CourseViewSet)
+router = routers.DefaultRouter()
+router.register(r'course', CourseViewSet, basename='course')
 
 urlpatterns += router.urls
+

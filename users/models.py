@@ -19,3 +19,14 @@ class User(AbstractUser):
     def __str__(self):
         return self.email
 
+
+class Payment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    payment_date = models.DateField(verbose_name='Дата оплаты')
+    course = models.ForeignKey('materials.Course', on_delete=models.CASCADE, verbose_name='Курс', related_name='payments',
+                               **NULLABLE)
+    lesson = models.ForeignKey('materials.Lesson', on_delete=models.CASCADE, verbose_name='Урок', related_name='payments',
+                               **NULLABLE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Сумма')
+    payment_method = models.CharField(max_length=50, choices=[('cash', 'Cash'), ('transfer', 'Transfer')], verbose_name='Способ оплаты')
+
