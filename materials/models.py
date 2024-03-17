@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 
-import users.models
+from users.models import User
 
 NULLABLE = {'null': True, 'blank': True}
 
@@ -36,3 +36,17 @@ class Course(models.Model):
     class Meta:
         verbose_name = 'Курс'
         verbose_name_plural = 'Курсы'
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Курс')
+    status = models.BooleanField(default=False, verbose_name='Статус подписки')
+
+    def __str__(self):
+        return f'{self.user} - {self.course}'
+
+    class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
+        unique_together = ('user', 'course')
