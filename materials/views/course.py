@@ -10,6 +10,7 @@ from materials.utils import get_url_for_payment
 from users.models import Payment
 from users.permissions import IsModerator, IsOwner
 from users.serializers.payment import PaymentSerializer
+from materials.tasks import send_email_update_course
 
 
 class CourseViewSet(ModelViewSet):
@@ -26,6 +27,12 @@ class CourseViewSet(ModelViewSet):
         new_course = serializer.save()
         new_course.user = self.request.user
         new_course.save()
+
+    def perform_update(self, serializer):
+        updated_course = serializer.save()
+        instance = serializer.instance
+        send_email_update_course.delay(instance)
+        updated_course.save()
 
     def get_permissions(self):
         if self.action == 'create':
